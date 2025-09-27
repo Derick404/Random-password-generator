@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<body>
+  <input id="pw" readonly style="width:300px" />
+  <button id="gen">Generate</button>
+  <button id="copy">Copy</button>
+
+  <script>
+    // paste the generatePassword function here (from above)
+    // For brevity assume it's already defined.
+
+    document.getElementById('gen').addEventListener('click', () => {
+      const pw = generatePassword({ length: 16, avoidAmbiguous: true });
+      document.getElementById('pw').value = pw;
+    });
+
+    document.getElementById('copy').addEventListener('click', async () => {
+      const text = document.getElementById('pw').value;
+      if (!text) return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          alert('Copied!');
+        } else {
+          // fallback
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          alert('Copied (fallback)!');
+        }
+      } catch (err) {
+        alert('Copy failed: ' + err);
+      }
+    });
+  </script>
+  <script src="index.js"></script>
+</body>
+</html>
